@@ -56,18 +56,17 @@ FROM route JOIN stops ON (route.stop=stops.id)
 WHERE name = 'Craiglockhart' AND company='LRT')
 AND company='LRT';
 
--- 第10题未完成(有错误，待解决)
-SELECT a.num,a.company,stopa.name,b.num,b.company
-FROM route a JOIN route b ON
-  (a.company=b.company AND a.num=b.num)
-  JOIN route c ON
-  (a.company=c.company AND a.num=c.num)
-   JOIN stops stopa ON a.stop = stopa.id
-   JOIN stops stopb ON b.stop = stopb.id
-   JOIN stops stopc ON c.stop = stopc.id
-WHERE stopa.name='Craiglockhart' 
-	  AND stopb.name='Sighthill' 
-	  AND stopc.name='Craiglockhart';
+-- update on 2021-05-17
+SELECT a.num, a.company, stopb.name, d.num, d.company
+FROM route a 
+  JOIN route b ON (a.company=b.company AND a.num=b.num) 
+  JOIN route c ON (b.company<>c.company OR b.num<>c.num) 
+  JOIN route d ON (c.company=d.company AND c.num=d.num)
+  JOIN stops stopa ON (a.stop=stopa.id AND stopa.name='Craiglockhart')
+  JOIN stops stopb ON (b.stop=stopb.id)
+  JOIN stops stopc ON (c.stop=stopc.id)
+  JOIN stops stopd ON (d.stop=stopd.id AND stopd.name='Lochend')
+WHERE stopb.name = stopc.name
 
 -- self join quiz
 -- 1. Select the code that would show it is possible to get from Craiglockhart to Haymarket
